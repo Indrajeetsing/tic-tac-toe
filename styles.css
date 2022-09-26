@@ -1,0 +1,37 @@
+body {
+  background-color: #14bdac;
+  color: rgb(84, 84, 84);
+  font-family: Roboto, arial, sans-serif;
+  padding: 10px;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  border-style: hidden;
+  margin: auto;
+}
+
+td {
+  height: 48px;
+  padding: 8px;
+  width: 48px;
+  margin: auto;
+  text-align: center;
+}
+
+table td {
+  border: 5px solid #185f6882;
+}
+
+button {
+  background-color: #14bdac;
+  color: #185f6882;
+  border-color: #185f6882;
+  padding: 10px;
+  width: 100px;
+  border-radius: 10px;
+  margin: 3em 0;
+}
