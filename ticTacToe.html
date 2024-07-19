@@ -6,60 +6,87 @@
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="styles.css" />
     <script>
-      var player = "X";
+      let player = "X";
+      const cells = Array.from({ length: 9 }, (_, i) => `b${i + 1}`);
+  
       function updateValue(id) {
-        var el = document.getElementById(id);
+        const el = document.getElementById(id);
         el.innerText = player;
         el.style["pointer-events"] = "none";
-        var status = check();
-        var headingEl = document.getElementById("heading");
-        if (status == "won") {
-          var tableEl = document.getElementById("table");
+        const status = checkWinner(getBoard());
+        const headingEl = document.getElementById("heading");
+        const tableEl = document.getElementById("table");
+  
+        if (status) {
           tableEl.style["pointer-events"] = "none";
-          headingEl.innerText = `Player ${player} won the game`;
-        } else if (status == "draw") {
-          var tableEl = document.getElementById("table");
-          tableEl.style["pointer-events"] = "none";
-          headingEl.innerText = `Game Draw`;
+          headingEl.innerText = status === 'Tie' ? 'Game draw' : `Player ${player} won`;
         } else {
           player = player === "X" ? "O" : "X";
           headingEl.innerText = `Player ${player} turn`;
+          if (player === 'O') {
+            setTimeout(() => {
+              const bestMoveIndex = bestMove(getBoard());
+              updateValue(cells[bestMoveIndex]);
+            }, 500);
+          }
         }
       }
-
-      function check() {
-        var b1, b2, b3, b4, b5, b6, b7, b8, b9;
-        b1 = document.getElementById("b1").innerText;
-        b2 = document.getElementById("b2").innerText;
-        b3 = document.getElementById("b3").innerText;
-        b4 = document.getElementById("b4").innerText;
-        b5 = document.getElementById("b5").innerText;
-        b6 = document.getElementById("b6").innerText;
-        b7 = document.getElementById("b7").innerText;
-        b8 = document.getElementById("b8").innerText;
-        b9 = document.getElementById("b9").innerText;
-
-        if (b1 && b1 == b2 && b1 == b3) {
-          return "won";
-        } else if (b4 && b4 == b5 && b4 == b6) {
-          return "won";
-        } else if (b7 && b7 == b8 && b7 == b9) {
-          return "won";
-        } else if (b1 && b1 == b4 && b1 == b7) {
-          return "won";
-        } else if (b5 && b2 == b5 && b2 == b8) {
-          return "won";
-        } else if (b3 && b3 == b6 && b3 == b9) {
-          return "won";
-        } else if (b1 && b1 == b5 && b1 == b9) {
-          return "won";
-        } else if (b3 && b3 == b5 && b3 == b7) {
-          return "won";
-        } else if (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9) {
-          return "draw";
-        } else {
-          return "continue";
+  
+      function getBoard() {
+        return cells.map(cell => document.getElementById(cell).innerText);
+      }
+  
+      function checkWinner(board) {
+        const winningCombos = [
+          [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+          [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+          [0, 4, 8], [2, 4, 6]             // diagonals
+        ];
+  
+        for (let combo of winningCombos) {
+          const [a, b, c] = combo;
+          if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return board[a];
+          }
         }
+  
+        return board.includes('') ? null : 'Tie';
+      }
+  
+      function minimax(board, currentPlayer) {
+        const availableSpots = board.map((cell, idx) => cell === '' ? idx : null).filter(idx => idx !== null);
+        const winner = checkWinner(board);
+  
+        if (winner === 'X') return { score: -10 };
+        if (winner === 'O') return { score: 10 };
+        if (winner === 'Tie') return { score: 0 };
+  
+        const moves = availableSpots.map(spot => {
+          const move = { index: spot };
+          board[spot] = currentPlayer;
+  
+          if (currentPlayer === 'O') {
+            move.score = minimax(board, 'X').score;
+          } else {
+            move.score = minimax(board, 'O').score;
+          }
+  
+          board[spot] = '';
+          return move;
+        });
+  
+        let bestMove;
+        if (currentPlayer === 'O') {
+          bestMove = moves.reduce((best, move) => move.score > best.score ? move : best, { score: -Infinity });
+        } else {
+          bestMove = moves.reduce((best, move) => move.score < best.score ? move : best, { score: Infinity });
+        }
+  
+        return bestMove;
+      }
+  
+      function bestMove(board) {
+        return minimax(board, 'O').index;
       }
 
       function reset() {
