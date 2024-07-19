@@ -14,16 +14,21 @@
         el.innerText = player;
         el.style["pointer-events"] = "none";
         const status = checkWinner(getBoard());
-        const headingEl = document.getElementById("heading");
+        const statusEl = document.getElementById("status");
         const tableEl = document.getElementById("table");
   
-        if (status) {
+        if (status && status.winner) {
           tableEl.style["pointer-events"] = "none";
-          headingEl.innerText = status === 'Tie' ? 'Game draw' : `Player ${player} won`;
+          statusEl.innerText = player === "X" ? `Congratulations! You beat the AI!` : `The AI wins! Better luck next time!`;
+          highlightWinningCells(status.line);
+        } else if (status === 'Tie') {
+          tableEl.style["pointer-events"] = "none";
+          statusEl.innerText = `It's a tie! What a close game!`;
         } else {
           player = player === "X" ? "O" : "X";
-          headingEl.innerText = `Player ${player} turn`;
+          statusEl.innerText = `Your turn!`;
           if (player === 'O') {
+            statusEl.innerText = 'AI is making a move...';
             setTimeout(() => {
               const bestMoveIndex = bestMove(getBoard());
               updateValue(cells[bestMoveIndex]);
@@ -46,20 +51,27 @@
         for (let combo of winningCombos) {
           const [a, b, c] = combo;
           if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return board[a];
+            return { winner: board[a], line: combo };
           }
         }
   
         return board.includes('') ? null : 'Tie';
+      }
+
+      function highlightWinningCells(line) {
+        line.forEach(index => {
+          const cell = document.getElementById(cells[index]);
+          cell.classList.add('winning-cell');
+        });
       }
   
       function minimax(board, currentPlayer) {
         const availableSpots = board.map((cell, idx) => cell === '' ? idx : null).filter(idx => idx !== null);
         const winner = checkWinner(board);
   
-        if (winner === 'X') return { score: -10 };
-        if (winner === 'O') return { score: 10 };
-        if (winner === 'Tie') return { score: 0 };
+        if (winner && winner.winner === 'X') return { score: -10 };
+        if (winner && winner.winner === 'O') return { score: 10 };
+        if (winner === 'Tie') return { score: 0 }
   
         const moves = availableSpots.map(spot => {
           const move = { index: spot };
@@ -95,8 +107,8 @@
     </script>
   </head>
   <body>
-    <h3>Tic-Tac-Toe AI Challenge</h3>
-    <p id="heading">Player X can start game</p>
+    <h3 id="heading">Tic-Tac-Toe AI Challenge</h3>
+    <p id="status">Player X, make your first move.</p>
     <table id="table">
       <tbody>
         <tr>
@@ -116,6 +128,6 @@
         </tr>
       </tbody>
     </table>
-    <button onclick="reset()">Reset</button>
+    <button id="reset-button" onclick="reset()">Restart</button>
   </body>
 </html>

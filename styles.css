@@ -1,44 +1,73 @@
 body {
-  background-color: #14bdac;
-  color: rgb(84, 84, 84);
-  font-family: Roboto, arial, sans-serif;
-  padding: 10px;
-  font-size: 1.5em;
-  font-weight: bold;
-  text-align: center;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+#status {
+  font-size: 1.2em;
+  margin-bottom: 20px;
 }
 
 table {
   border-collapse: collapse;
-  border-style: hidden;
-  margin: auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 td {
-  height: 48px;
-  padding: 8px;
-  width: 48px;
-  margin: auto;
+  height: 80px;
+  width: 80px;
   text-align: center;
+  vertical-align: middle;
+  font-size: 2em;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-table td {
-  border: 5px solid #185f6882;
+td:hover {
+  background-color: #e0e0e0;
 }
 
-button {
-  background-color: #14bdac;
-  color: #185f6882;
-  border-color: #185f6882;
-  padding: 10px;
-  width: 100px;
-  border-radius: 10px;
-  margin: 3em 0;
+.winning-cell {
+  background-color: #ffe700;
 }
 
-@media only screen and (max-width: 600px) {
-  body {
-    zoom: 2;
+#reset-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#reset-button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  td {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+  }
+
+  #reset-button {
+    font-size: 0.9em;
   }
 }
-
