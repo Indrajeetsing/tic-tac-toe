@@ -32,8 +32,8 @@
             statusEl.innerText = 'AI is making a move...';
             setTimeout(() => {
               const bestMoveIndex = bestMove(getBoard());
-              updateValue(cells[bestMoveIndex]);
               tableEl.style["pointer-events"] = "auto";
+              updateValue(cells[bestMoveIndex]);
             }, 500);
           }
         }
