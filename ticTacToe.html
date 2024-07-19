@@ -28,10 +28,12 @@
           player = player === "X" ? "O" : "X";
           statusEl.innerText = `Your turn!`;
           if (player === 'O') {
+            tableEl.style["pointer-events"] = "none";
             statusEl.innerText = 'AI is making a move...';
             setTimeout(() => {
               const bestMoveIndex = bestMove(getBoard());
               updateValue(cells[bestMoveIndex]);
+              tableEl.style["pointer-events"] = "auto";
             }, 500);
           }
         }
