@@ -32,7 +32,7 @@ Feel free to customize the game by modifying the styles or game logic. Contribut
 
 ## Author
 
-- **Your Name** - [Indrajeet Singh Mandloi](https://github.com/indrajeetsing)
+- [Indrajeet Singh Mandloi](https://github.com/indrajeetsing)
 
 ## Acknowledgments
 
